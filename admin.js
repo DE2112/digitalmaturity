@@ -41,15 +41,31 @@ admins.init({
 }, {sequelize: sequelizer, modelName: 'admins', createdAt: false, updatedAt: false})
 
 
-admins.init({
-    admin_id: {
+blocks.init({
+    block_id: {
         type: sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
         allowNull: false
     },
+    title: {
+        type: sequelize.STRING(100),
+        allowNull: false
+    }
+}, {sequelize: sequelizer, modelName: 'blocks', createdAt: false, updatedAt: false})
 
-}, {sequelize: sequelizer, modelName: 'admins', createdAt: false, updatedAt: false})
+questions.init({
+   question_id: {
+        type: sequelize.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+        allowNull: false
+    },
+    title: {
+        type: sequelize.STRING(100),
+        allowNull: false
+    }
+}, {sequelize: sequelizer, modelName: 'blocks', createdAt: false, updatedAt: false})
 
 export let adminToken = undefined
 
