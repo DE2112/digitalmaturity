@@ -134,11 +134,10 @@ export async function getLoginInput(req, res) {
     }
 }
 
-export async function render(req, res) {
+export async function renderBlockSelect(req, res) {
     if (!req.body) return res.sendStatus(400)
 
-    const blocksAll = await blocks.findAll()
-    admin_page_params.question_form_params.blocks = blocksAll
+    admin_page_params.question_form_params.blocks = await blocks.findAll()
 }
 
 
