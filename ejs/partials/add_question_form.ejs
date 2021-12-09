@@ -1,13 +1,7 @@
 <form class="row g-3">
-    <div class="col-auto">
-        <label for="staticEmail2" class="visually-hidden">Email</label>
-        <input type="text" readonly class="form-control-plaintext" id="staticEmail2" value="email@example.com">
-    </div>
-    <div class="col-auto">
-        <label for="inputPassword2" class="visually-hidden">Password</label>
-        <input type="password" class="form-control" id="inputPassword2" placeholder="Password">
-    </div>
-    <div class="col-auto">
-        <button type="submit" class="btn btn-primary mb-3">Confirm identity</button>
-    </div>
+    <select class="form-select" aria-label="Выберите блок">
+        <option selected></option>
+        <% for (let i = 1; i <= question_form_params.blocks.count; i++)
+            {%><option value="<%= question_form_params.blocks['block_id']%>"><%= question_form_params.blocks['title']%></option> <%}%>
+    </select>
 </form>

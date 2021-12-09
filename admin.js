@@ -6,6 +6,15 @@ import sanitizer from 'sanitize'
 import {Sequelize} from "sequelize";
 import cookies from 'cookies'
 
+export let admin_page_params = {
+    title: 'Панель Администратора',
+    active: 'admin' ,
+    is_admin: false,
+    question_form_params: {
+        blocks: {}
+    }
+}
+
 const sequelizer = new Sequelize(
     'postgres',
     'de2112',
@@ -61,15 +70,48 @@ questions.init({
         primaryKey: true,
         allowNull: false
     },
-    title: {
+    text: {
         type: sequelize.STRING(100),
         allowNull: false
+    },
+    block_id: {
+       type: sequelize.INTEGER,
+       references: 'blocks',
+       referencesKey: 'block_id',
+       allowNull: false
     }
-}, {sequelize: sequelizer, modelName: 'blocks', createdAt: false, updatedAt: false})
+
+}, {sequelize: sequelizer, modelName: 'questions', createdAt: false, updatedAt: false})
+blocks.hasMany(questions)
+
+answers.init({
+    answer_id: {
+        type: sequelize.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+        allowNull: false
+    },
+    text: {
+        type: sequelize.STRING(100),
+        allowNull: false
+    },
+    value: {
+        type: sequelize.INTEGER,
+        allowNull: false
+    },
+    question_id: {
+        type: sequelize.INTEGER,
+        references: 'questions',
+        referencesKey: 'question_id',
+        allowNull: false
+    }
+}, {sequelize: sequelizer, modelName: 'answers', createdAt: false, updatedAt: false})
+questions.hasMany(answers)
+
 
 export let adminToken = undefined
 
-export async function getInput(req, res) {
+export async function getLoginInput(req, res) {
     if (!req.body) return res.sendStatus(400)
     //const login = sanitizer().value(req.body['admin-login'], 'string')
     const login = req.body['admin-login']
@@ -86,8 +128,17 @@ export async function getInput(req, res) {
 
     if (results['password'] === password && req.cookies.token !== undefined) {
         adminToken = req.cookies.token
-        res.render('admin', {title: 'Панель Администратора', active: 'admin', is_admin: true})
+
+        admin_page_params.is_admin = true
+        res.render('admin', {admin_page_params})
     }
+}
+
+export async function render(req, res) {
+    if (!req.body) return res.sendStatus(400)
+
+    const blocksAll = await blocks.findAll()
+    admin_page_params.question_form_params.blocks = blocksAll
 }
 
 
