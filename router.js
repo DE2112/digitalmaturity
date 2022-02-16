@@ -1,27 +1,29 @@
 import express from 'express'
-import {getLoginInput, adminToken, admin_page_params, renderBlockSelect} from './admin.js'
-import cookies from 'cookies'
+import {login, logout, sendQuestion, setBlocks, adminToken, admin_page_params} from './admin.js'
+import {getQuestions, sendFormAnswer} from './form.js'
+import {getResults} from './result.js'
+import bodyParser from 'body-parser'
 
 export const router = express.Router()
 
-router.get('/', (req, res) => {
-    res.render('form', { title: 'Форма', active: 'form' })
-})
+const jsonParser = bodyParser.json()
 
+router.get('/', getQuestions)
+router.get('/result', getResults)
 router.get('/admin', (req, res) => {
     const isAdmin = req.cookies.token !== undefined ? adminToken === req.cookies.token : false
     admin_page_params.is_admin = isAdmin
-    if (isAdmin) {
-        renderBlockSelect(req, res)
-    }
-    res.render('admin', {admin_page_params})
+
+    if (isAdmin)
+        setBlocks(req, res)
+    else
+        res.render('admin', admin_page_params)
 })
 
 const urlencodedParser = express.urlencoded({extended: false});
-router.post('/admin', urlencodedParser, getLoginInput)
-
-router.get('/result', (req, res) => {
-    res.render('result', { title: 'Результат', active: 'result' })
-})
+router.post('/admin-login', urlencodedParser, login)
+router.post('/admin-logout', logout)
+router.post('/admin-add-question', urlencodedParser, sendQuestion)
+router.post('/send-form', urlencodedParser, sendFormAnswer)
 
 

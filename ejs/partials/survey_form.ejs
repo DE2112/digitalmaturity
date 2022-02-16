@@ -1,0 +1,32 @@
+<form method="post" action="send-form" class="container">
+    <div class="m-5">
+        <div class="my-3">
+            <label for="department-select" class="form-label"><h3>Выберите Вашу кафедру:</h3></label>
+            <select name="department-id" class="form-select" id="department-select" required>
+                <% for (let i = 0; i < departments.length; i++) {%>
+                    <option value="<%= departments[i].department_id %>"><%= departments[i].department_name %></option>
+                <%}%>
+            </select>
+        </div>
+        <div class="my-3">
+            <label for="name-input" class="form-label"><h3>Ваше ФИО:</h3></label>
+            <input type="text" class="form-control" name="name" id="name-input" required>
+        </div>
+    </div>
+    <% for (let i = 0; i < questions.length; i++){%>
+        <h2 class="my-5"><%= questions[i].text %></h2>
+        <div id="answers">
+            <% for(let j = 4 * i; j < (4 * i) + 4 ; j++) {%>
+                <div class="form-check my-4">
+                        <input class="form-check-input" type="radio" name="<%= i%>" id="answer-<%= j%>" value="<%= answers[j].value %>" required>
+                        <label class="form-check-label">
+                            <%= answers[j].text %>
+                        </label>
+                </div>
+            <%}%>
+        </div>
+    <%}%>
+    <div class="d-grid gap-2 col-4 mx-auto my-4">
+            <button type="submit" class="btn btn-primary">Отправить</button>
+    </div>
+</form>

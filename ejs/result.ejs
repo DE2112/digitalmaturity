@@ -5,5 +5,19 @@
 </head>
 <body>
     <%- include('./partials/navbar'); %>
+
+    <div class="container">
+        <% for (let i = 0; i < departments.length; i++) {%>
+        <h2 class="my-4">Средние показатели цифровой зрелости по категориям на <%= departments[i].department_name %>:</h2>
+            <ul class="list-group list-group-flush">
+                <% for (let j = 0; j < blocks.length; j++) { console.log(`${i}-${j} : ${avg_results_by_dep[i][j]}`)%>
+
+                    <li class="list-group-item">
+                        <h5><%= blocks[j].title%>:</h5> <%= avg_results_by_dep[i][j]%>%
+                    </li>
+                <%}%>
+            </ul>
+        <%}%>
+    </div>
 </body>
 </html>

@@ -5,5 +5,8 @@
 </head>
 <body>
     <%- include('./partials/navbar'); %>
+
+    <% if (!is_sent) {%><%- include('./partials/survey_form')%><%}
+    else {%>здесь чето будет<%}%>
 </body>
 </html>
